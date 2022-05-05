@@ -24,5 +24,7 @@
     @endif
     
     {!! link_to_route('tasks.create', '新しいタスクを登録', [], ['class' => 'btn btn-primary']) !!}
+    
+    {{ $tasks->links() }}
 
 @endsection
