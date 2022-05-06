@@ -82,6 +82,8 @@ class TasksController extends Controller
                 'task' => $task,
             ]);
         }
+
+        return redirect('/');
     }
 
     /**
@@ -99,6 +101,8 @@ class TasksController extends Controller
                 'task' => $task,
             ]);
         }
+        
+        return redirect('/');
     }
     /**
      * Update the specified resource in storage.
@@ -138,6 +142,7 @@ class TasksController extends Controller
         if (\Auth::id() === $task->user_id) {
             $task->delete();
         }
-            return redirect('/');
+        
+        return redirect('/');
     }
 }
