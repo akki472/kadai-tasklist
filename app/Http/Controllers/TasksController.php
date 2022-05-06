@@ -55,9 +55,10 @@ class TasksController extends Controller
         $request->validate([
             'status' => 'required|max:10',
             'content' => 'required|max:255',
-            ]);
+        ]);
         
         $task = new Task;
+
         $task->status = $request->status;
         $task->content = $request->content;
         $task->user_id = $request->user()->id;
@@ -75,10 +76,12 @@ class TasksController extends Controller
     public function show($id)
     {
         $task = Task::findOrFail($id);
-
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        
+        if (\Auth::id() === $task->user_id) {
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+        }
     }
 
     /**
@@ -91,11 +94,12 @@ class TasksController extends Controller
     {
         $task = Task::findOrFail($id);
 
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        if (\Auth::id() === $task->user_id) {
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        }
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -111,10 +115,12 @@ class TasksController extends Controller
         ]);
         
         $task = Task::findOrFail($id);
-
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
+        
+        if (\Auth::id() === $task->user_id) {
+            $task->status = $request->status;
+            $task->content = $request->content;
+            $task->save();
+        }
 
         return redirect('/');
     }
@@ -129,8 +135,9 @@ class TasksController extends Controller
     {
         $task = Task::findOrFail($id);
 
-        $task->delete();
-
-        return redirect('/');
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
+            return redirect('/');
     }
 }
